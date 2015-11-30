@@ -18,12 +18,12 @@ var routes = Routes{
 		"/",
 		Index,
 	},
-	// Route{
-	//		"VideoCommentsShow",
-	//		"GET",
-	//		"/video/{videoId}/comments",
-	//		VideoCommentsShow,
-	//	},
+	Route{
+		"VideoCommentsShow",
+		"GET",
+		"/video/{videoId}/comments",
+		VideoCommentsShow,
+	},
 	Route{
 		"VideoCommentCreate",
 		"POST",

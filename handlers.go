@@ -60,6 +60,8 @@ func TodoCreate(w http.ResponseWriter, r *http.Request) {
 
 func VideosCommentsCreate(w http.ResponseWriter, r *http.Request) {
 	var comment repository.Comment
+	vars := mux.Vars(r)
+	videoId := vars["videoId"]
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
 	if err != nil {
 		panic(err)
@@ -75,7 +77,16 @@ func VideosCommentsCreate(w http.ResponseWriter, r *http.Request) {
 			panic(err)
 		}
 	}
-	postRepository.SavePostById(comment)
-	w.Header().Set("Content-Typ", "application/json;charset=UTF-8")
+	postRepository.SavePostById(videoId, comment)
+	w.Header().Set("Content-Type", "application/json;charset=UTF-8")
 	w.WriteHeader(http.StatusCreated)
+}
+
+func VideoCommentsShow(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	videoId := vars["videoId"]
+	posts := postRepository.FetchPostsForId(videoId)
+	for i := 0; i < len(posts); i++ {
+		fmt.Fprintln(w, posts[i].Comment)
+	}
 }
