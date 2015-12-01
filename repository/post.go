@@ -2,7 +2,6 @@ package repository
 
 import (
 	"bytes"
-	"log"
 
 	"gopkg.in/redis.v3"
 )
@@ -22,12 +21,10 @@ func (r *PostRepository) SavePostById(id string, comment Comment) {
 
 	buffer.WriteString("video:")
 	buffer.WriteString(id)
-	log.Println(buffer.String())
-	result, err := r.client.ZAdd(buffer.String(), member).Result()
+	err := r.client.ZAdd(buffer.String(), member).Err()
 	if err != nil {
 		panic(err)
 	}
-	log.Println(result)
 }
 
 func (r *PostRepository) FetchPostsForId(id string) []Comment {
@@ -35,7 +32,6 @@ func (r *PostRepository) FetchPostsForId(id string) []Comment {
 
 	buffer.WriteString("video:")
 	buffer.WriteString(id)
-	log.Println(buffer.String())
 
 	opts := redis.ZRangeByScore{Min: "0", Max: "inf"}
 
